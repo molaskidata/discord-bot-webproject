@@ -1,2 +1,2 @@
 import infobot
-infobot  
+infobot.run_bot()
