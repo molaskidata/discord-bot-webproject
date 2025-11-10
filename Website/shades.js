@@ -1,37 +1,25 @@
 class ContentFeed {
     constructor() {
         this.container = document.getElementById('contentFeedContainer');
-        this.apiUrl = 'https://thecoffeylounge.com/api/content/latest';
         this.loadContent();
-        setInterval(() => this.loadContent(), 30000);
     }
 
     async loadContent() {
-        try {
-            const response = await fetch(this.apiUrl);
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+        const mockItems = [
+            {
+                author: "CoffeeBot",
+                content: "Willkommen bei Coffee & Codes! ☕",
+                timestamp: new Date().toISOString(),
+                type: "text"
+            },
+            {
+                author: "Admin",
+                content: "Schaut gerne in unserem Discord vorbei! 🚀",
+                timestamp: new Date(Date.now() - 3600000).toISOString(),
+                type: "text"
             }
-            const contentItems = await response.json();
-            this.displayContent(contentItems);
-        } catch (error) {
-            console.error('Error loading content from API:', error);
-            const mockItems = [
-                {
-                    author: "TestUser",
-                    content: "Das ist ein Test-Post für localhost 🚀",
-                    timestamp: new Date().toISOString(),
-                    type: "text"
-                },
-                {
-                    author: "CoffeeBot",
-                    content: "Willkommen im Coffee & Codes Discord! ☕ (API offline - Mock-Daten)",
-                    timestamp: new Date(Date.now() - 3600000).toISOString(),
-                    type: "text"
-                }
-            ];
-            this.displayContent(mockItems);
-        }
+        ];
+        this.displayContent(mockItems);
     }
 
     displayContent(items) {
