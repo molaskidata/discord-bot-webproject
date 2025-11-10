@@ -1,10 +1,8 @@
-// Content Feed JavaScript
 class ContentFeed {
     constructor() {
         this.container = document.getElementById('contentFeedContainer');
-        this.apiUrl = 'http://128.140.47.138/api/content/latest';
+        this.apiUrl = 'https://thecoffeylounge.com/api/content/latest';
         this.loadContent();
-        // Reload content every 30 seconds
         setInterval(() => this.loadContent(), 30000);
     }
 
@@ -17,8 +15,22 @@ class ContentFeed {
             const contentItems = await response.json();
             this.displayContent(contentItems);
         } catch (error) {
-            console.error('Error loading content:', error);
-            this.displayError(error.message);
+            console.error('Error loading content from API:', error);
+            const mockItems = [
+                {
+                    author: "TestUser",
+                    content: "Das ist ein Test-Post für localhost 🚀",
+                    timestamp: new Date().toISOString(),
+                    type: "text"
+                },
+                {
+                    author: "CoffeeBot",
+                    content: "Willkommen im Coffee & Codes Discord! ☕ (API offline - Mock-Daten)",
+                    timestamp: new Date(Date.now() - 3600000).toISOString(),
+                    type: "text"
+                }
+            ];
+            this.displayContent(mockItems);
         }
     }
 
@@ -31,7 +43,6 @@ class ContentFeed {
             `;
             return;
         }
-
         const contentHtml = items.map(item => this.createContentItem(item)).join('');
         this.container.innerHTML = contentHtml;
     }
@@ -43,7 +54,6 @@ class ContentFeed {
             hour: '2-digit',
             minute: '2-digit'
         });
-
         const icon = this.getTypeIcon(item.type);
         const content = this.formatContent(item.content, item.type);
         const linkPreview = this.createLinkPreview(item.content, item.type, item.title);
@@ -66,16 +76,14 @@ class ContentFeed {
     }
 
     createLinkPreview(content, type, title = null) {
-        // Extract URLs from content
         const urlRegex = /(https?:\/\/[^\s]+)/g;
         const urls = content.match(urlRegex);
         
         if (!urls || urls.length === 0) return '';
         
-        const url = urls[0]; // Use first URL
+        const url = urls[0];
         const domain = this.extractDomain(url);
-        
-        // Generate preview based on URL type
+
         if (type === 'youtube') {
             return this.createYouTubePreview(url, domain, title);
         } else if (url.includes('spotify.com')) {
@@ -92,12 +100,8 @@ class ContentFeed {
         if (!videoId) return this.createGenericPreview(url, domain);
         
         const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-        
-        // Use provided title or fetch it
         const displayTitle = title || "📺 YouTube Video";
         const description = title ? "YouTube Video" : "Lade Video-Titel...";
-        
-        // If no title provided, try to fetch it
         if (!title) {
             this.fetchYouTubeTitle(videoId).then(fetchedTitle => {
                 const previewElement = document.querySelector(`[data-video-id="${videoId}"]`);
@@ -192,11 +196,8 @@ class ContentFeed {
     }
 
     formatContent(content, type) {
-        // Make links clickable
         const urlRegex = /(https?:\/\/[^\s]+)/g;
         let formatted = content.replace(urlRegex, '<a href="$1" target="_blank" class="content-link">$1</a>');
-        
-        // Truncate long content
         if (formatted.length > 200) {
             formatted = formatted.substring(0, 200) + '...';
         }
@@ -206,7 +207,6 @@ class ContentFeed {
 
     async fetchYouTubeTitle(videoId) {
         try {
-            // Simple fallback since YouTube API requires key
             return `📺 YouTube Video (${videoId.substring(0, 8)}...)`;
         } catch (error) {
             console.error('Error fetching YouTube title:', error);
@@ -224,7 +224,16 @@ class ContentFeed {
     }
 }
 
-// Initialize content feed when page loads
 document.addEventListener('DOMContentLoaded', () => {
     new ContentFeed();
+    
+    const style = document.createElement('style');
+    style.textContent = `
+        .content-feed-container { height: 100%; overflow-y: auto; padding-right: 10px; }
+        .content-item { background: rgba(255,255,255,0.03); border: 1px solid #245785; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
+        .content-author { font-weight: bold; color: #fff; margin-bottom: 8px; }
+        .content-text { color: #fff; font-size: 1rem; line-height: 1.4; }
+        .content-timestamp { font-size: 0.8rem; color: #fff; margin-top: 8px; text-align: right; opacity: 0.8; }
+    `;
+    document.head.appendChild(style);
 });
