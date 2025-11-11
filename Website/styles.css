@@ -32,8 +32,8 @@ body {
 }
 
 .header-img-container {
-    width: 60px;
-    height: 60px;
+    width: 100px;  /* Vorher: 60px */
+    height: 100px; /* Vorher: 60px */
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid #245785;
@@ -149,7 +149,7 @@ body {
 }
 
 .heart-list li::before {
-    content: "❤️\00a0\00a0";
+    content: "•\00a0\00a0";
     position: absolute;
     left: 0;
     color: #fff;
@@ -378,5 +378,19 @@ body {
     .site-header {
         flex-direction: column;
         gap: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    .site-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .header-img-container {
+        width: 80px;  /* Vorher: 66px */
+        height: 80px; /* Vorher: 66px */
+    }
+    #main-title {
+        font-size: 3rem;
     }
 }
