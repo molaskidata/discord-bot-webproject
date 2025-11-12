@@ -1,6 +1,5 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 
-// Bot configuration
 const BOT_INFO = {
     name: "InfoBot",
     version: "1.0.0",
@@ -8,7 +7,6 @@ const BOT_INFO = {
     author: "mola"
 };
 
-// Create Discord client
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -17,13 +15,11 @@ const client = new Client({
     ]
 });
 
-// Bot ready event
 client.once('ready', () => {
     console.log(`${BOT_INFO.name} v${BOT_INFO.version} is online!`);
     console.log(`Logged in as ${client.user.tag}`);
 });
 
-// Basic ping command
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
     
@@ -36,12 +32,15 @@ client.on('messageCreate', (message) => {
     }
 });
 
-// Login with bot token (use environment variable)
 client.login(process.env.DISCORD_TOKEN);
 
-// Keep alive function for 24/7 hosting
+setInterval(() => {
+    console.log(`Bot alive: ${new Date().toISOString()}`);
+    process.stdout.write('\x1b[0G');
+}, 60000);
+
 setInterval(() => {
     console.log(`Bot alive at: ${new Date().toISOString()}`);
-}, 300000); // Every 5 minutes
+}, 300000);
 
 module.exports = { client, BOT_INFO };

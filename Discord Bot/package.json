@@ -1,0 +1,14 @@
+{
+  "name": "discord-infobot",
+  "version": "1.0.0",
+  "main": "infobot.js",
+  "scripts": {
+    "start": "node infobot.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
