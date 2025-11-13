@@ -55,7 +55,7 @@ function updateGameStatus() {
             type: ActivityType.Playing,
             details: `${gameTimer}h gespielt`,
             state: `Multiplayer Match`,
-            applicationId: BOT_INFO.publicKey,
+            applicationId: '1435244593301159978',
             assets: {
                 large_image: 'battlefield',
                 large_text: 'Battlefield 6'
