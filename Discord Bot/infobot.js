@@ -1,4 +1,5 @@
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
+const express = require('express');
 
 const BOT_INFO = {
     name: "InfoBot",
@@ -17,6 +18,22 @@ const client = new Client({
 
 let gameTimer = 0;
 const MAX_HOURS = 20;
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+    res.json({
+        status: 'Bot is online!',
+        name: BOT_INFO.name,
+        version: BOT_INFO.version,
+        uptime: process.uptime()
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`HTTP Server running on port ${PORT}`);
+});
 
 client.once('ready', () => {
     console.log(`${BOT_INFO.name} v${BOT_INFO.version} is online!`);
@@ -73,4 +90,4 @@ setInterval(() => {
     console.log(`Bot alive at: ${new Date().toISOString()}`);
 }, 300000);
 
-module.exports = { client, BOT_INFO };
+module.exports = { client, BOT_INFO, app };
