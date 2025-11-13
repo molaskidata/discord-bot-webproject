@@ -22,6 +22,33 @@ const MAX_HOURS = 20;
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const PREFIX = '&';
+
+const hiResponses = [
+    "Heyho, how ya doing? ☕",
+    "Hi! You coding right now? 💻", 
+    "Hey, how is life going? 😊",
+    "Hi creature, what's life on earth doing? 🌍"
+];
+
+const coffeeResponses = [
+    "Time for coffee break! ☕ Who's joining?",
+    "Coffee time! Let's fuel our coding session! ⚡",
+    "Perfect timing! I was craving some coffee too ☕",
+    "Coffee break = best break! Grab your mug! 🍵"
+];
+
+const programmingMemes = [
+    "It works on my machine! 🤷‍♂️",
+    "Copy from Stack Overflow? It's called research! 📚",
+    "Why do programmers prefer dark mode? Because light attracts bugs! 💡🐛",
+    "There are only 10 types of people: those who understand binary and those who don't! 🔢"
+];
+
+function getRandomResponse(responseArray) {
+    return responseArray[Math.floor(Math.random() * responseArray.length)];
+}
+
 app.get('/', (req, res) => {
     res.json({
         status: 'Bot is online!',
@@ -77,6 +104,22 @@ client.on('messageCreate', (message) => {
     
     if (message.content === '!info') {
         message.reply(`Bot: ${BOT_INFO.name} v${BOT_INFO.version}\nStatus: Online 24/7`);
+    }
+    
+    if (message.content.startsWith(PREFIX)) {
+        const command = message.content.slice(PREFIX.length).toLowerCase();
+        
+        switch(command) {
+            case 'hi':
+                message.reply(getRandomResponse(hiResponses));
+                break;
+            case 'coffee':
+                message.reply(getRandomResponse(coffeeResponses));
+                break;
+            case 'meme':
+                message.reply(getRandomResponse(programmingMemes));
+                break;
+        }
     }
 });
 
