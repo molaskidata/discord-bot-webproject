@@ -51,12 +51,13 @@ function updateGameStatus() {
     
     client.user.setPresence({
         activities: [{
-            name: `Battlefield 6`,
+            name: 'Battlefield 6',
             type: ActivityType.Playing,
             details: `${gameTimer}h gespielt`,
-            state: `Online seit ${gameTimer} Stunden`,
+            state: `Multiplayer Match`,
+            applicationId: BOT_INFO.publicKey,
             assets: {
-                large_image: 'https://i.imgur.com/V9U57EN.png',
+                large_image: 'battlefield',
                 large_text: 'Battlefield 6'
             },
             timestamps: {
