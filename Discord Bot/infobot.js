@@ -1,5 +1,6 @@
-const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
+const { Client, GatewayIntentBits, ActivityType, REST, Routes } = require('discord.js');
 const express = require('express');
+const commands = require('./commands.js');
 
 const BOT_INFO = {
     name: "InfoBot",
@@ -131,7 +132,23 @@ function updateGameStatus() {
     });
 }
 
-const PREFIX = '?';
+const programmingMemes = [
+    "It works on my machine! 🤷‍♂️",
+    "Copy from Stack Overflow? It's called research! 📚",
+    "Why do programmers prefer dark mode? Because light attracts bugs! 💡🐛",
+    "There are only 10 types of people: those who understand binary and those who don't! 🔢",
+    "99 little bugs in the code... take one down, patch it around... 127 little bugs in the code! 🐛",
+    "Debugging: Being the detective in a crime movie where you are also the murderer! 🔍",
+    "Programming is like writing a book... except if you miss a single comma the whole thing is trash! 📚",
+    "A SQL query goes into a bar, walks up to two tables and asks: 'Can I join you?' 🍺",
+    "Why do Java developers wear glasses? Because they can't C# 👓",
+    "How many programmers does it take to change a light bulb? None, that's a hardware problem! 💡",
+    "My code doesn't always work, but when it does, I don't know why! 🤔",
+    "Programming is 10% science, 20% ingenuity, and 70% getting the ingenuity to work with the science! ⚗️",
+    "I don't always test my code, but when I do, I do it in production! 🚀",
+    "Roses are red, violets are blue, unexpected '{' on line 32! 🌹",
+    "Git commit -m 'fixed bug' // creates 5 new bugs 🔄"
+];
 
 const hiResponses = [
     "Heyho, how ya doing? ☕",
@@ -145,16 +162,6 @@ const coffeeResponses = [
     "Coffee time! Let's fuel our coding session! ⚡",
     "Perfect timing! I was craving some coffee too ☕",
     "Coffee break = best break! Grab your mug! 🍵"
-];
-
-const programmingMemes = [
-    "It works on my machine! 🤷‍♂️",
-    "Copy from Stack Overflow? It's called research! 📚",
-    "Why do programmers prefer dark mode? Because light attracts bugs! 💡🐛",
-    "There are only 10 types of people: those who understand binary and those who don't! 🔢",
-    "99 little bugs in the code... take one down, patch it around... 127 little bugs in the code! 🐛",
-    "Debugging: Being the detective in a crime movie where you are also the murderer! 🔍",
-    "Programming is like writing a book... except if you miss a single comma the whole thing is trash! 📚"
 ];
 
 const motivationQuotes = [
@@ -178,46 +185,44 @@ function getRandomResponse(responseArray) {
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
     
-    if (message.content === '/help') {
+    if (message.content === '?hi') {
+        message.reply(getRandomResponse(hiResponses));
+    }
+    
+    if (message.content === '?coffee') {
+        message.reply(getRandomResponse(coffeeResponses));
+    }
+    
+    if (message.content === '?meme') {
+        message.reply(getRandomResponse(programmingMemes));
+    }
+    
+    if (message.content === '?motivation') {
+        message.reply(getRandomResponse(motivationQuotes));
+    }
+    
+    if (message.content === '?goodnight') {
+        message.reply(getRandomResponse(goodnightResponses));
+    }
+    
+    if (message.content === '?help') {
         let embed = new Discord.MessageEmbed()
             .setTitle("**Die Hilfe**")
             .setDescription("Alle verfügbaren Commands")
-            .addField("/hi", "Sag hallo", true)
-            .addField("/coffee", "Kaffee Zeit!", true)
-            .addField("/meme", "Programming Memes", true)
-            .addField("/motivation", "Motivation", true)
-            .addField("/goodnight", "Gute Nacht", true)
-            .addField("/ping", "Bot Test", true)
-            .addField("/info", "Bot Info", true)
+            .addField("?hi", "Sag hallo", true)
+            .addField("?coffee", "Kaffee Zeit!", true)
+            .addField("?meme", "Programming Memes", true)
+            .addField("?motivation", "Motivation", true)
+            .addField("?goodnight", "Gute Nacht", true)
             .setColor("#245785");
         message.reply({ embeds: [embed] });
     }
     
-    if (message.content === '/hi') {
-        message.reply(getRandomResponse(hiResponses));
-    }
-    
-    if (message.content === '/coffee') {
-        message.reply(getRandomResponse(coffeeResponses));
-    }
-    
-    if (message.content === '/meme') {
-        message.reply(getRandomResponse(programmingMemes));
-    }
-    
-    if (message.content === '/motivation') {
-        message.reply(getRandomResponse(motivationQuotes));
-    }
-    
-    if (message.content === '/goodnight') {
-        message.reply(getRandomResponse(goodnightResponses));
-    }
-    
-    if (message.content === '/ping') {
+    if (message.content === '?ping') {
         message.reply('Pong! Bot is running 24/7');
     }
     
-    if (message.content === '/info') {
+    if (message.content === '?info') {
         message.reply(`Bot: ${BOT_INFO.name} v${BOT_INFO.version}\nStatus: Online 24/7`);
     }
 });

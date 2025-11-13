@@ -1,3 +1,5 @@
+const { SlashCommandBuilder } = require('discord.js');
+
 const programmingMemes = [
     "It works on my machine! 🤷‍♂️",
     "Copy from Stack Overflow? It's called research! 📚",
@@ -49,3 +51,31 @@ function getRandomResponse(responseArray) {
 }
 
 let prefix = seerverstats[MessageChannel.guild.id].prefix;
+
+const commands = [
+    new SlashCommandBuilder()
+        .setName('hi')
+        .setDescription('Sag hallo'),
+    
+    new SlashCommandBuilder()
+        .setName('coffee')
+        .setDescription('Zeit für Kaffee!'),
+    
+    new SlashCommandBuilder()
+        .setName('meme')
+        .setDescription('Programming Memes'),
+    
+    new SlashCommandBuilder()
+        .setName('motivation')
+        .setDescription('Motivation bekommen'),
+    
+    new SlashCommandBuilder()
+        .setName('goodnight')
+        .setDescription('Gute Nacht sagen'),
+    
+    new SlashCommandBuilder()
+        .setName('help')
+        .setDescription('Alle verfügbaren Commands'),
+];
+
+module.exports = commands;
