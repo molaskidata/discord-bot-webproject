@@ -46,7 +46,7 @@ client.once('ready', () => {
 function updateGameStatus() {
     gameTimer++;
     if (gameTimer > MAX_HOURS) {
-        gameTimer = 1;
+        gameTimer = 2;
     }
     
     client.user.setPresence({
