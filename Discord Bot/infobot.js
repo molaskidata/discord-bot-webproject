@@ -125,8 +125,20 @@ function updateGameStatus() {
     });
 }
 
+const processedMessages = new Set();
+
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
+    
+    // Verhindere doppelte Verarbeitung
+    const messageId = message.id;
+    if (processedMessages.has(messageId)) return;
+    processedMessages.add(messageId);
+    
+    // Aufräumen nach 1 Minute
+    setTimeout(() => {
+        processedMessages.delete(messageId);
+    }, 60000);
     
     if (message.content === '!hi') {
         message.reply(getRandomResponse(hiResponses));
