@@ -1,7 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
-
 dotenv.config({ path: "../.env" });
 
 const app = express();
@@ -34,7 +33,7 @@ app.post("/api/token", async (req, res) => {
     });
 
     const { access_token } = await response.json();
-    res.send({ access_token });
+    res.send({access_token});
   } catch (error) {
     console.error('Discord OAuth error:', error);
     res.status(500).json({ error: 'OAuth authentication failed' });

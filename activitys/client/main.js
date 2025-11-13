@@ -8,7 +8,7 @@ document.querySelector('#app').innerHTML = `
     <div id="activity-content" style="display: none;">
       <h2>🎮 Activity läuft!</h2>
       <p>Willkommen in der Coffee & Codes Activity!</p>
-      <p>Hier könnt ihr zusammen abhängen! ☕</p>
+      <p>Hier könnt ihr zusammen abhängen und coden! ☕💻</p>
     </div>
   </div>
 `;
