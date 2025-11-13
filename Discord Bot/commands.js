@@ -47,3 +47,5 @@ const goodnightResponses = [
 function getRandomResponse(responseArray) {
     return responseArray[Math.floor(Math.random() * responseArray.length)];
 }
+
+let prefix = seerverstats[MessageChannel.guild.id].prefix;
