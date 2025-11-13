@@ -131,6 +131,15 @@ function updateGameStatus() {
     });
 }
 
+const PREFIX = '/';
+
+const hiResponses = [
+    "Heyho, how ya doing? ☕",
+    "Hi! You coding right now? 💻", 
+    "Hey, how is life going? 😊",
+    "Hi creature, what's life on earth doing? 🌍"
+];
+
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
     
@@ -154,6 +163,12 @@ client.on('messageCreate', (message) => {
                 break;
             case 'meme':
                 message.reply(getRandomResponse(programmingMemes));
+                break;
+            case 'motivation':
+                message.reply(getRandomResponse(motivationQuotes));
+                break;
+            case 'goodnight':
+                message.reply(getRandomResponse(goodnightResponses));
                 break;
         }
     }
