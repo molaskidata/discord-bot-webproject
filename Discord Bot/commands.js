@@ -10,12 +10,7 @@ const programmingMemes = [
     "Programming is like writing a book... except if you miss a single comma the whole thing is trash! 📚",
     "A SQL query goes into a bar, walks up to two tables and asks: 'Can I join you?' 🍺",
     "Why do Java developers wear glasses? Because they can't C# 👓",
-    "How many programmers does it take to change a light bulb? None, that's a hardware problem! 💡",
-    "My code doesn't always work, but when it does, I don't know why! 🤔",
-    "Programming is 10% science, 20% ingenuity, and 70% getting the ingenuity to work with the science! ⚗️",
-    "I don't always test my code, but when I do, I do it in production! 🚀",
-    "Roses are red, violets are blue, unexpected '{' on line 32! 🌹",
-    "Git commit -m 'fixed bug' // creates 5 new bugs 🔄"
+    "How many programmers does it take to change a light bulb? None, that's a hardware problem! 💡"
 ];
 
 const hiResponses = [
@@ -50,32 +45,11 @@ function getRandomResponse(responseArray) {
     return responseArray[Math.floor(Math.random() * responseArray.length)];
 }
 
-let prefix = seerverstats[MessageChannel.guild.id].prefix;
-
-const commands = [
-    new SlashCommandBuilder()
-        .setName('hi')
-        .setDescription('Sag hallo'),
-    
-    new SlashCommandBuilder()
-        .setName('coffee')
-        .setDescription('Zeit für Kaffee!'),
-    
-    new SlashCommandBuilder()
-        .setName('meme')
-        .setDescription('Programming Memes'),
-    
-    new SlashCommandBuilder()
-        .setName('motivation')
-        .setDescription('Motivation bekommen'),
-    
-    new SlashCommandBuilder()
-        .setName('goodnight')
-        .setDescription('Gute Nacht sagen'),
-    
-    new SlashCommandBuilder()
-        .setName('help')
-        .setDescription('Alle verfügbaren Commands'),
-];
-
-module.exports = commands;
+module.exports = {
+    programmingMemes,
+    hiResponses,
+    coffeeResponses,
+    motivationQuotes,
+    goodnightResponses,
+    getRandomResponse
+};
