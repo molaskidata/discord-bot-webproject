@@ -19,47 +19,83 @@ const client = new Client({
 let gameTimer = 0;
 const MAX_HOURS = 20;
 
+// Robust HTTP Server für Render
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const PREFIX = '&';
+app.use(express.json());
 
-const hiResponses = [
-    "Heyho, how ya doing? ☕",
-    "Hi! You coding right now? 💻", 
-    "Hey, how is life going? 😊",
-    "Hi creature, what's life on earth doing? 🌍"
-];
-
-const coffeeResponses = [
-    "Time for coffee break! ☕ Who's joining?",
-    "Coffee time! Let's fuel our coding session! ⚡",
-    "Perfect timing! I was craving some coffee too ☕",
-    "Coffee break = best break! Grab your mug! 🍵"
-];
-
-const programmingMemes = [
-    "It works on my machine! 🤷‍♂️",
-    "Copy from Stack Overflow? It's called research! 📚",
-    "Why do programmers prefer dark mode? Because light attracts bugs! 💡🐛",
-    "There are only 10 types of people: those who understand binary and those who don't! 🔢"
-];
-
-function getRandomResponse(responseArray) {
-    return responseArray[Math.floor(Math.random() * responseArray.length)];
-}
-
+// Health Check Endpoint
 app.get('/', (req, res) => {
-    res.json({
-        status: 'Bot is online!',
-        name: BOT_INFO.name,
-        version: BOT_INFO.version,
-        uptime: process.uptime()
+    res.status(200).json({
+        status: 'Bot Online',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        memory: process.memoryUsage(),
+        bot: BOT_INFO
     });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`HTTP Server running on port ${PORT}`);
+// Keep-Alive Endpoint
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
+// Bot Status Endpoint
+app.get('/status', (req, res) => {
+    res.status(200).json({
+        logged_in: client.readyAt !== null,
+        ping: client.ws.ping,
+        guilds: client.guilds.cache.size,
+        users: client.users.cache.size
+    });
+});
+
+// Game Status Endpoint
+app.get('/game-status', (req, res) => {
+    gameTimer++;
+    if (gameTimer > MAX_HOURS) {
+        gameTimer = 2;
+    }
+    
+    res.status(200).json({
+        gameTimer,
+        gameStatus: `Multiplayer Match`,
+        applicationId: '1435244593301159978',
+        assets: {
+            large_image: 'battlefield',
+            large_text: 'Battlefield 6'
+        },
+        timestamps: {
+            start: Date.now() - (gameTimer * 3600000)
+        }
+    });
+});
+
+// Self-Ping um Render wach zu halten
+const RENDER_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+
+setInterval(async () => {
+    try {
+        const response = await fetch(`${RENDER_URL}/health`);
+        console.log(`🔄 Self-ping: ${response.status} - Bot stays awake`);
+    } catch (error) {
+        console.log('❌ Self-ping failed:', error.message);
+    }
+}, 840000); // Every 14 minutes (vor dem 15min timeout)
+
+// Server starten und Port binden
+const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ HTTP Server running on port ${PORT}`);
+    console.log(`✅ Server bound to 0.0.0.0:${PORT}`);
+});
+
+// Graceful Shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM received, shutting down gracefully');
+    server.close(() => {
+        console.log('Process terminated');
+    });
 });
 
 client.once('ready', () => {
