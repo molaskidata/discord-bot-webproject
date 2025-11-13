@@ -131,7 +131,7 @@ function updateGameStatus() {
     });
 }
 
-const PREFIX = '/';
+const PREFIX = '?';
 
 const hiResponses = [
     "Heyho, how ya doing? ☕",
