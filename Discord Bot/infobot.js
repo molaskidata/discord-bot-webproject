@@ -1,5 +1,6 @@
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const express = require('express');
+const fs = require('fs');
 
 const BOT_INFO = {
     name: "InfoBot",
@@ -154,7 +155,15 @@ const programmingMemes = [
     "There are only 10 types of people: those who understand binary and those who don't! 🔢",
     "99 little bugs in the code... take one down, patch it around... 127 little bugs in the code! 🐛",
     "Debugging: Being the detective in a crime movie where you are also the murderer! 🔍",
-    "Programming is like writing a book... except if you miss a single comma the whole thing is trash! 📚"
+    "Programming is like writing a book... except if you miss a single comma the whole thing is trash! 📚",
+    "A SQL query goes into a bar, walks up to two tables and asks: 'Can I join you?' 🍺",
+    "Why do Java developers wear glasses? Because they can't C# 👓",
+    "How many programmers does it take to change a light bulb? None, that's a hardware problem! 💡",
+    "My code doesn't always work, but when it does, I don't know why! 🤔",
+    "Programming is 10% science, 20% ingenuity, and 70% getting the ingenuity to work with the science! ⚗️",
+    "I don't always test my code, but when I do, I do it in production! 🚀",
+    "Roses are red, violets are blue, unexpected '{' on line 32! 🌹",
+    "Git commit -m 'fixed bug' // creates 5 new bugs 🔄"
 ];
 
 const motivationQuotes = [
@@ -175,19 +184,49 @@ function getRandomResponse(responseArray) {
     return responseArray[Math.floor(Math.random() * responseArray.length)];
 }
 
+// Server-spezifische Prefixes
+let serverstats = {}
+
+// Lade Server-Daten
+try {
+    serverstats = JSON.parse(fs.readFileSync('./serverstats.json', 'utf8'));
+} catch (error) {
+    console.log('Creating new serverstats.json');
+}
+
+// Speichere Server-Daten
+function saveServerStats() {
+    fs.writeFileSync('./serverstats.json', JSON.stringify(serverstats, null, 2));
+}
+
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
     
+    // Server-Stats initialisieren
+    if (!serverstats[message.guild.id]) {
+        serverstats[message.guild.id] = {
+            prefix: "?"
+        };
+        saveServerStats();
+    }
+    
+    const serverPrefix = serverstats[message.guild.id].prefix;
+    
+    console.log(`Message received: "${message.content}" from ${message.author.tag}`);
+    
     if (message.content === '!ping') {
         message.reply('Pong! Bot is running 24/7');
+        return;
     }
     
     if (message.content === '!info') {
         message.reply(`Bot: ${BOT_INFO.name} v${BOT_INFO.version}\nStatus: Online 24/7`);
+        return;
     }
     
-    if (message.content.startsWith(PREFIX)) {
-        const command = message.content.slice(PREFIX.length).toLowerCase();
+    if (message.content.startsWith(serverPrefix)) {
+        const command = message.content.slice(serverPrefix.length).toLowerCase().trim();
+        console.log(`Command detected: "${command}" with prefix "${serverPrefix}"`);
         
         switch(command) {
             case 'hi':
@@ -205,8 +244,11 @@ client.on('messageCreate', (message) => {
             case 'goodnight':
                 message.reply(getRandomResponse(goodnightResponses));
                 break;
+            case 'help':
+                message.reply(`**Available Commands:**\n\`${serverPrefix}hi\` - Say hello\n\`${serverPrefix}coffee\` - Time for coffee!\n\`${serverPrefix}meme\` - Programming memes\n\`${serverPrefix}motivation\` - Get motivated\n\`${serverPrefix}goodnight\` - Good night messages\n\`!ping\` - Test bot\n\`!info\` - Bot info`);
+                break;
             default:
-                message.reply(`Unknown command: ${command}. Try: ?hi, ?coffee, ?meme, ?motivation, ?goodnight`);
+                message.reply(`❓ Unknown command: \`${command}\`\n\nTry: \`${serverPrefix}help\` for all commands`);
                 break;
         }
     }
@@ -222,5 +264,3 @@ setInterval(() => {
 setInterval(() => {
     console.log(`Bot alive at: ${new Date().toISOString()}`);
 }, 300000);
-
-module.exports = { client, BOT_INFO, app };
