@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 
 const BOT_INFO = {
     name: "InfoBot",
@@ -15,10 +15,40 @@ const client = new Client({
     ]
 });
 
+let gameTimer = 0;
+const MAX_HOURS = 20;
+
 client.once('ready', () => {
     console.log(`${BOT_INFO.name} v${BOT_INFO.version} is online!`);
     console.log(`Logged in as ${client.user.tag}`);
+    
+    updateGameStatus();
+    setInterval(updateGameStatus, 3600000); // Every hour
 });
+
+function updateGameStatus() {
+    gameTimer++;
+    if (gameTimer > MAX_HOURS) {
+        gameTimer = 1;
+    }
+    
+    client.user.setPresence({
+        activities: [{
+            name: `Battlefield 6`,
+            type: ActivityType.Playing,
+            details: `${gameTimer}h gespielt`,
+            state: `Online seit ${gameTimer} Stunden`,
+            assets: {
+                large_image: 'https://i.imgur.com/V9U57EN.png',
+                large_text: 'Battlefield 6'
+            },
+            timestamps: {
+                start: Date.now() - (gameTimer * 3600000)
+            }
+        }],
+        status: 'online'
+    });
+}
 
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
