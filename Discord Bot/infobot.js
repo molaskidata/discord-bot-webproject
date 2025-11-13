@@ -2,7 +2,7 @@ const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const express = require('express');
 
 const BOT_INFO = {
-    name: "InfoBot",
+    name: "CoderMaster",
     version: "1.0.0",
     publicKey: "c754a88258af8d04269c334d31632c463f6c74cceb320f6c27c404a41dc5d4a1",
     author: "mola"
