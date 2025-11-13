@@ -140,6 +140,41 @@ const hiResponses = [
     "Hi creature, what's life on earth doing? 🌍"
 ];
 
+const coffeeResponses = [
+    "Time for coffee break! ☕ Who's joining?",
+    "Coffee time! Let's fuel our coding session! ⚡",
+    "Perfect timing! I was craving some coffee too ☕",
+    "Coffee break = best break! Grab your mug! 🍵"
+];
+
+const programmingMemes = [
+    "It works on my machine! 🤷‍♂️",
+    "Copy from Stack Overflow? It's called research! 📚",
+    "Why do programmers prefer dark mode? Because light attracts bugs! 💡🐛",
+    "There are only 10 types of people: those who understand binary and those who don't! 🔢",
+    "99 little bugs in the code... take one down, patch it around... 127 little bugs in the code! 🐛",
+    "Debugging: Being the detective in a crime movie where you are also the murderer! 🔍",
+    "Programming is like writing a book... except if you miss a single comma the whole thing is trash! 📚"
+];
+
+const motivationQuotes = [
+    "Code like you're changing the world! 🌟",
+    "Every bug is just a feature in disguise! 🐛✨",
+    "You're not stuck, you're just debugging life! 🔧",
+    "Keep coding, keep growing! 💪"
+];
+
+const goodnightResponses = [
+    "Sweet dreams! Don't forget to push your code! 🌙",
+    "Sleep tight! May your dreams be bug-free! 😴",
+    "Good night! Tomorrow's code awaits! ⭐",
+    "Rest well, coding warrior! 🛡️💤"
+];
+
+function getRandomResponse(responseArray) {
+    return responseArray[Math.floor(Math.random() * responseArray.length)];
+}
+
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
     
@@ -169,6 +204,9 @@ client.on('messageCreate', (message) => {
                 break;
             case 'goodnight':
                 message.reply(getRandomResponse(goodnightResponses));
+                break;
+            default:
+                message.reply(`Unknown command: ${command}. Try: ?hi, ?coffee, ?meme, ?motivation, ?goodnight`);
                 break;
         }
     }
